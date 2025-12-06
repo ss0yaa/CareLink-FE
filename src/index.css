@@ -104,8 +104,3 @@ body {
   max-width: 1024px;
   overflow: hidden;
 }
-
-/* 스크롤이 필요한 특정 페이지 */
-.scrollable {
-  overflow-y: auto;
-}
