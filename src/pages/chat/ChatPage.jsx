@@ -1,7 +1,12 @@
 import React from 'react'
+import SideNavBar from '@/components/common/SideNavBar'
 
 const ChatPage = () => {
-  return <>챗봇 페이지입니다.</>
+  return (
+    <>
+      <SideNavBar />
+    </>
+  )
 }
 
 export default ChatPage
