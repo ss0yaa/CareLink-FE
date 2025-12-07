@@ -24,7 +24,7 @@ function SideNavBar() {
     navigate(path)
   }
   return (
-    <div className='absolute left-0 top-0 h-dvh w-68 bg-[#F8F9F9] px-5 border-r border-r-[#DADADA]'>
+    <div className='h-dvh w-68 bg-[#F8F9F9] px-5 border-r border-r-[#DADADA]'>
       <div className='flex flex-row items-center gap-1.5 pt-5 px-2.5 pb-15'>
         <img src={Profile} />
         <p className='text-[30px]'>이름</p>
