@@ -1,0 +1,19 @@
+import React from 'react'
+import CheckOn from '@/assets/icons/icon-checked-on.svg'
+
+function TodoButton({ icon, title, subtitle }) {
+  return (
+    <div className='w-[298px] flex flex-row justify-between items-center px-5 py-[21px] bg-white rounded-2xl shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border border-[#34C9B0] cursor-pointer'>
+      <div className='flex flex-row gap-[15px]'>
+        <img src={icon} />
+        <div className='flex flex-col gap-1.5'>
+          <p className='text-xl font-semibold text-black'>{title}</p>
+          <p className='text-base font-normal text-neutral-600'>{subtitle}</p>
+        </div>
+      </div>
+      <img src={CheckOn} />
+    </div>
+  )
+}
+
+export default TodoButton
