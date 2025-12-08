@@ -9,12 +9,12 @@ function ChatInputBar({ onSend }) {
   }
   return (
     <div className=' h-[99px] bg-white rounded-b-[20px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] flex justify-center items-center'>
-      <div className='flex flex-row'>
+      <div className='flex flex-row px-[26px] w-full'>
         <input
           placeholder='하고 싶은 말을 여기에 입력해주세요.'
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className='w-[872px] px-[30px] py-[19px] bg-white rounded-tl-[10px] rounded-bl-[10px] border border-[#47B5A2] text-[18px] font-normal'
+          className='flex-1 px-[30px] py-[19px] bg-white rounded-tl-[10px] rounded-bl-[10px] border border-[#47B5A2] text-[18px] font-normal'
         />
         <button
           onClick={handleClick}
