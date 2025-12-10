@@ -18,12 +18,30 @@ const SummaryBox = () => {
       </div>
       {/* 육하원칙 작성 */}
       <div className='flex flex-col gap-10 pt-[25px] pr-[58px] pb-[50px] pl-12'>
-        <FieldRow label='누가' placeholder='주체는 누구인가요?' />
-        <FieldRow label='언제' placeholder='언제 일어난 일인가요?' />
-        <FieldRow label='어디서' placeholder='어디에서 일어난 일인가요?' />
-        <FieldRow label='무엇을' placeholder='무엇을 했나요?' multiline={true} rows={2} />
-        <FieldRow label='어떻게' placeholder='어떻게 했나요?' multiline={true} rows={2} />
-        <FieldRow label='왜' placeholder='왜 그랬나요?' multiline={true} rows={2} />
+        <FieldRow label='누가' placeholder='주체는 누구인가요?' disabled={showFeedback} />
+        <FieldRow label='언제' placeholder='언제 일어난 일인가요?' disabled={showFeedback} />
+        <FieldRow label='어디서' placeholder='어디에서 일어난 일인가요?' disabled={showFeedback} />
+        <FieldRow
+          label='무엇을'
+          placeholder='무엇을 했나요?'
+          multiline={true}
+          rows={2}
+          disabled={showFeedback}
+        />
+        <FieldRow
+          label='어떻게'
+          placeholder='어떻게 했나요?'
+          multiline={true}
+          rows={2}
+          disabled={showFeedback}
+        />
+        <FieldRow
+          label='왜'
+          placeholder='왜 그랬나요?'
+          multiline={true}
+          rows={2}
+          disabled={showFeedback}
+        />
       </div>
       {/* 버튼 */}
       <div className='flex justify-center'>

@@ -5,7 +5,7 @@ function SubmitButton({ label, onClick }) {
     <button
       type='button'
       onClick={onClick}
-      className='w-[400px] bg-[#6AC7A6]  py-[15px] rounded-[20px] text-white text-[20px] font-semibold'
+      className='w-[400px] bg-[#6AC7A6]  py-[15px] rounded-[20px] text-white text-[20px] font-semibold cursor-pointer'
     >
       {label}
     </button>

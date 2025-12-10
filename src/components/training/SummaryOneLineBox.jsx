@@ -9,12 +9,17 @@ const SummaryOneLineBox = () => {
     setShowFeedback(true)
   }
   return (
-    <div>
+    <div className='flex flex-col w-full'>
       <div className='flex flex-row items-center gap-[13px]'>
         <img src={IconNumber} />
         <p className='font-medium text-[25px]'>한 줄 요약하기</p>
       </div>
       {/* 요약 input box */}
+      <textarea
+        placeholder='기사 내용을 바탕으로 한 줄로 요약해 보세요.'
+        disabled={showFeedback}
+        className='flex-1 mt-5 mr-[58px] mb-[50px] ml-[48px] bg-[#F2F3F4] rounded-[10px] resize-none px-5 py-[15px] text-black text-[18px]'
+      />
       {/* 제출 버튼 */}
       <div className='flex justify-center'>
         <SubmitButton label='최종 피드백 보기' onClick={handleSubmit} />
