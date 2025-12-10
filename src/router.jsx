@@ -3,7 +3,8 @@ import App from './App'
 // 챗봇
 import ChatPage from '@/pages/chat/ChatPage'
 //인지훈련
-import CognitiveTrainingPage from './pages/training/CognitiveTrainingPage'
+import TrainingPage from './pages/training/TrainingPage'
+import TrainingArticlePage from './pages/training/TrainingArticlePage'
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,13 @@ const router = createBrowserRouter([
   {
     path: '/training',
     element: <App />,
-    children: [{ index: true, element: <CognitiveTrainingPage /> }],
+    children: [
+      { index: true, element: <TrainingPage /> },
+      {
+        path: 'article',
+        element: <TrainingArticlePage />,
+      },
+    ],
   },
 ])
 
