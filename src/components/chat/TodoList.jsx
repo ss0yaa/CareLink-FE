@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import TodoButton from './TodoButton'
-import PillModal from './PillModal'
+import PillModal from '../todolist/PillModal'
 import Pill from '@/assets/icons/icon-pill.svg'
 import Condition from '@/assets/icons/icon-condition.svg'
 import Quiz from '@/assets/icons/icon-quiz.svg'
