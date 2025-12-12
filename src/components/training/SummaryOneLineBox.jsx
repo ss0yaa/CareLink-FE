@@ -28,7 +28,7 @@ const SummaryOneLineBox = () => {
       {showFeedback && (
         <FeedbackBox
           title='최종 피드백'
-          text='AI의 자동 요약을 참교해 비교해보세요. 꾸준한 훈련은 인지 능력 향상에 큰 도움이 됩니다.'
+          text={`모든 훈련을 완료하셨습니다! 정말 대단해요!\n AI의 자동 요약을 참교해 비교해보세요. 꾸준한 훈련은 인지 능력 향상에 큰 도움이 됩니다.`}
           boxtitle='AI 자동 요약 (참고용)'
           feedbackType={2}
         />

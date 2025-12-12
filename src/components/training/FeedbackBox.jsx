@@ -8,7 +8,7 @@ function FeedbackBox({ title, text, boxtitle, feedbackType }) {
         <img src={CircleCheck} />
         <p className='font-semibold text-[23px]'>{title}</p>
       </div>
-      <p className='text-[18px]'>{text}</p>
+      <p className='text-[18px] whitespace-pre-line'>{text}</p>
       <div className='py-[18px] px-[21px] bg-white rounded-[10px]'>
         <p className='font-semibold text-[20px]'>{boxtitle}</p>
         <div className='pt-2.5'>
