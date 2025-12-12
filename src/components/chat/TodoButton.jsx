@@ -1,4 +1,5 @@
 import React from 'react'
+import CheckOff from '@/assets/icons/icon-checked-off.svg'
 import CheckOn from '@/assets/icons/icon-checked-on.svg'
 
 function TodoButton({ icon, title, subtitle }) {
@@ -11,7 +12,7 @@ function TodoButton({ icon, title, subtitle }) {
           <p className='text-[15px] font-normal text-neutral-600'>{subtitle}</p>
         </div>
       </div>
-      <img src={CheckOn} />
+      <img src={CheckOff} />
     </div>
   )
 }
