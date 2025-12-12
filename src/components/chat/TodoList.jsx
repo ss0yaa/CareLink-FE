@@ -26,7 +26,14 @@ const TodoList = () => {
             setOpenModal('pill')
           }}
         />
-        <TodoButton icon={Condition} title={'컨디션'} subtitle={'오늘 기분은 어때요?'} />
+        <TodoButton
+          icon={Condition}
+          title={'컨디션'}
+          subtitle={'오늘 기분은 어때요?'}
+          onClick={() => {
+            setOpenModal('condition')
+          }}
+        />
         <TodoButton
           icon={Quiz}
           title={'오늘의 퀴즈'}
