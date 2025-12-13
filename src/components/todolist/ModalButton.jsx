@@ -5,7 +5,7 @@ function ModalButton({ label, className, onClick }) {
     <>
       <button
         onClick={onClick}
-        className={`w-72 h-16 font-semibold text-white text-center rounded-[10px] cursor-pointer ${className}`}
+        className={`w-72 h-16 font-semibold text-white text-[23px] text-center rounded-[10px] cursor-pointer ${className}`}
       >
         {label}
       </button>
