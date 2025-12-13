@@ -3,7 +3,7 @@ import Correct from '@/assets/icons/icon-correct.svg'
 import NoCorrect from '@/assets/icons/icon-no-correct.svg'
 
 function QuizButton({ text, onClick, isCorrect, isWrong, disabled }) {
-  const base = `w-60 h-36 text-[40px] rounded-[20px] cursor-pointer`
+  const base = `w-60 h-36 font-medium text-[40px] rounded-[20px] cursor-pointer`
 
   let style = 'bg-gray-100'
 
