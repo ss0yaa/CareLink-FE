@@ -7,7 +7,7 @@ function ModalBase({ title, detail, onClose, onConfirm, children, containerClass
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black/40'>
       <div
-        className={`relative flex flex-col items-center justify-center m-auto py-10 bg-white shadow-[0px_1px_5px_3px_rgba(0,0,0,0.25)] rounded-[25px] ${containerClassName}`}
+        className={`max-h-[95dvh] overflow-y-auto relative flex flex-col items-center justify-center m-auto py-10 bg-white shadow-[0px_1px_5px_3px_rgba(0,0,0,0.25)] rounded-[25px] ${containerClassName}`}
       >
         <div className='flex flex-col items-center gap-2.5'>
           <p className='font-semibold text-[40px]'>{title}</p>

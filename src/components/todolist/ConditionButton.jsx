@@ -10,7 +10,7 @@ function ConditionButton({ label, icon, isSelected, onClick }) {
 
   return (
     <button type='button' onClick={onClick} className={`${base} ${style}`}>
-      <div className='flex flex-col items-center justify-center gap-[5px]'>
+      <div className='flex flex-col items-center justify-center gap-[5px] font-medium text-[20px]'>
         {icon && <img src={icon} />}
         {label}
       </div>
