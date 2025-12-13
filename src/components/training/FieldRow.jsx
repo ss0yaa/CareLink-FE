@@ -3,7 +3,7 @@ import React from 'react'
 function FieldRow({ label, placeholder, multiline = false, rows = 2, value, disabled = false }) {
   return (
     <div className='grid grid-cols-[82px_1fr] items-start'>
-      <p className='font-semibold text-[20px] leading-tight'>{label}</p>
+      <p className='font-semibold text-[20px] pt-3.5 leading-tight'>{label}</p>
       {/* multiline 여부 체크 */}
       {multiline ? (
         <textarea

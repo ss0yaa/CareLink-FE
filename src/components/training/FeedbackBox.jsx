@@ -3,7 +3,7 @@ import CircleCheck from '@/assets/icons/icon-circle-check.svg'
 
 function FeedbackBox({ title, text, boxtitle, feedbackType }) {
   return (
-    <div className='flex flex-col gap-5 p-[30px] mt-[50px] mr-[58px] ml-[48px] bg-[#D4ECDB] rounded-[20px]'>
+    <div className='flex flex-col gap-5 p-[30px] mt-[50px] mr-[58px] ml-12 bg-[#D4ECDB] rounded-[20px]'>
       <div className='flex flex-row gap-[11px]'>
         <img src={CircleCheck} />
         <p className='font-semibold text-[23px]'>{title}</p>

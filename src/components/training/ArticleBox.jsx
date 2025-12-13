@@ -24,7 +24,7 @@ function ArticleBox() {
           </p>
         </div>
         <SummaryBox />
-        <div className='w-full outline-1 '></div>
+        <hr className='w-[880px] border-0 border-t border-[#606060]' />
         <SummaryOneLineBox />
       </div>
     </div>
