@@ -54,7 +54,7 @@ function QuizModal({ onClose, allChecked }) {
         onConfirm={handleConfirm}
         containerClassName='w-[871px]'
       >
-        <p className='mt-[54px] font-semibold text-[36px] text-center'>{quizDummy.question}</p>
+        <p className='mt-10 font-semibold text-[36px] text-center'>{quizDummy.question}</p>
         <div className='mt-[50px] mb-[85px] grid grid-cols-2 gap-x-20 gap-y-[60px]'>
           {quizDummy.options.map((q) => {
             const isSelected = q.id === selectedId // 내가 고른 버튼
