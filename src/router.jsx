@@ -8,12 +8,14 @@ import TrainingArticlePage from './pages/training/TrainingArticlePage'
 import TrainingResultPage from './pages/training/TrainingResultPage'
 // 환경설정
 import SettingsPage from './pages/settings/SettingsPage'
+//로그인
+import LoginPage from './pages/login/LoginPage'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    children: [{ index: true, element: <ChatPage /> }], // 임시 메인 페이지 챗봇으로
+    children: [{ index: true, element: <LoginPage /> }], // 메인 페이지 로그인으로 변경!
   },
   {
     path: '/chat',
