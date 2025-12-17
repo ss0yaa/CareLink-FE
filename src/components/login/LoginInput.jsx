@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import React from 'react'
-import TextField from './TextField'
+import TextField from '../common/TextField'
 
 const LoginInput = () => {
   const [phoneNumber, setPhoneNumber] = useState('')
