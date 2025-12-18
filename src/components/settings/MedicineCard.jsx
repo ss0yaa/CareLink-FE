@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react'
 import IconSelect from '@/assets/icons/icon-select.svg'
 import IconEdit from '@/assets/icons/icon-edit.svg'
 import IconTrash from '@/assets/icons/icon-trash.svg'
+import TimePicker from './TimePicker'
 
 function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
   const [name, setName] = useState(item.name)
   const [times, setTimes] = useState(item.time ? [item.time] : [''])
+  const [isTimeModalOpen, setIsTimeModalOpen] = useState(false)
+  const [activeTimeIndex, setActiveTimeIndex] = useState(null)
   useEffect(() => {
     if (isEditing) {
       setName(item.name)
@@ -13,7 +16,10 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
     }
   }, [isEditing, item.name, item.time])
   // 시간 선택 모달
-  const handleModal = (index) => {}
+  const handleModal = (index) => {
+    setActiveTimeIndex(index)
+    setIsTimeModalOpen(true)
+  }
 
   // 시간 추가 버튼
   const handleAddTime = () => {
@@ -75,9 +81,20 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
             </div>
             <div className='flex flex-col gap-2.5 mt-[30px]'>
               <p className='font-medium text-[23px]'>복용시간</p>
-              <div className='px-[25px] py-[17px] font-semibold text-[18px] bg-white rounded-[10px] border-[1.50px] border-[#B3B3B3]'>
-                {item.time}
-              </div>
+              {item.times && item.times.length > 0 ? (
+                item.times.map((t, i) => (
+                  <div
+                    key={i}
+                    className='px-[25px] py-[17px] font-semibold text-[18px] bg-white rounded-[10px] border-[1.50px] border-[#B3B3B3] mb-2'
+                  >
+                    {t}
+                  </div>
+                ))
+              ) : (
+                <div className='px-[25px] py-[17px] font-semibold text-[18px] bg-white rounded-[10px] border-[1.50px] border-[#B3B3B3]'>
+                  {item.time || '시간 정보 없음'}
+                </div>
+              )}
             </div>
           </>
         )}
@@ -92,6 +109,14 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
           </button>
         </div>
       )}
+      <TimePicker
+        isOpen={isTimeModalOpen}
+        onClose={() => setIsTimeModalOpen(false)}
+        onConfirm={(selectedTime) => {
+          setTimes((prev) => prev.map((t, i) => (i === activeTimeIndex ? selectedTime : t)))
+          setIsTimeModalOpen(false)
+        }}
+      />
     </div>
   )
 }
