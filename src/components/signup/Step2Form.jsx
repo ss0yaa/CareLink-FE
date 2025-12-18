@@ -24,7 +24,7 @@ const Step2Form = ({ form, setField }) => {
           />
           <TextField
             label='보호자 이메일'
-            type='password'
+            type='text'
             placeholder='final@likelion.ac.kr'
             value={form.caregiverEmail}
             onChange={(e) => setField('caregiverEmail', e.target.value)}
