@@ -28,11 +28,7 @@ function MainSettings(props) {
             icon={Pill}
             title='약 복용 정보 수정'
             subtitle='복용 중인 약의 종류나 복용 시간을 변경할 수 있습니다.'
-<<<<<<< HEAD
-            path='/settings/medications/edit'
-=======
             path='/settings'
->>>>>>> dab64dfa8ca7872ddec519a3b92968057cfd3e05
           />
           <SettingsButton
             icon={Hospital}
