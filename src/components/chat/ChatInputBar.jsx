@@ -1,12 +1,13 @@
-import React, { useRef, useState, useCallback } from 'react'
+import React, { useRef, useState } from 'react'
 import MicModal from './MicModal'
 import MicOff from '@/assets/icons/icon-microphone-off.svg'
 import MicOn from '@/assets/icons/icon-microphone-on.svg'
 
-function ChatInputBar({ onSend }) {
+function ChatInputBar({ onSendText, onSendVoice }) {
   const [text, setText] = useState('') // 입력한 채팅
   const [isRecording, setIsRecording] = useState(false) // 녹음중 여부
   const [isMicModalOpen, setIsMicModalOpen] = useState(false)
+
   const streamRef = useRef(null) // 마이크
   const recordRef = useRef(null) // 녹음기
   const chunksRef = useRef([]) // 녹음 데이터
@@ -14,10 +15,6 @@ function ChatInputBar({ onSend }) {
   // 녹음 시작 함수
   const startRecording = async () => {
     try {
-      if (isRecording) return
-      if (!navigator.mediaDevices?.getUserMedia) return
-      if (!window.MediaRecorder) return
-
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       streamRef.current = stream // 마이크 기억
 
@@ -36,7 +33,7 @@ function ChatInputBar({ onSend }) {
       }
 
       // 녹음이 끝났을 때
-      recorder.onstop = () => {
+      recorder.onstop = async () => {
         const blob = new Blob(chunksRef.current, { type: recorder.mimeType })
         // Blob -> File 변환
         const file = new File([blob], 'recording.webm', {
@@ -46,13 +43,10 @@ function ChatInputBar({ onSend }) {
 
         // 업로드할 파일 콘솔 찍어보기
         console.log('업로드할 파일: ', file)
-        chunksRef.current = []
-        setIsRecording(false)
-        setIsMicModalOpen(false)
 
-        streamRef.current?.getTracks().forEach((t) => t.stop())
-        streamRef.current = null
-        recordRef.current = null
+        const extractedText = await onSendVoice(file)
+        setText(extractedText)
+        cleanup()
       }
 
       recorder.start()
@@ -64,22 +58,32 @@ function ChatInputBar({ onSend }) {
     }
   }
 
+  const cleanup = () => {
+    streamRef.current?.getTracks().forEach((t) => t.stop())
+    streamRef.current = null
+    recordRef.current = null
+    chunksRef.current = []
+    setIsRecording(false)
+    setIsMicModalOpen(false)
+  }
+
   // 녹음 중단 함수
   const stopRecording = () => {
     if (!recordRef.current) return
     recordRef.current.stop() // onstop 실행
   }
 
-  const handleClick = () => {
+  // 텍스트 전송 함수
+  const handleSend = () => {
     if (!text.trim()) return
-    onSend(text)
+    onSendText(text)
     setText('')
   }
+
   const handleKeyDown = (e) => {
-    // 엔터 누르면 채팅 전송
     if (e.key === 'Enter') {
       e.preventDefault()
-      handleClick()
+      handleSend()
     }
   }
 
@@ -106,7 +110,7 @@ function ChatInputBar({ onSend }) {
         </div>
         {/* 전송 버튼 */}
         <button
-          onClick={handleClick}
+          onClick={handleSend}
           className='px-[29px] py-[18px] bg-primary rounded-tr-[10px] rounded-br-[10px] text-white text-5 font-normal cursor-pointer'
         >
           보내기
