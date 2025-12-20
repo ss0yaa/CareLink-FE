@@ -6,16 +6,20 @@ import TimePicker from './TimePicker'
 
 function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
   const [name, setName] = useState(item.name)
-  const [times, setTimes] = useState(item.times ?? [])
+  const [times, setTimes] = useState(
+    item.times && item.times.length > 0 ? item.times : [{ id: null, time: '' }],
+  )
   const [isTimeModalOpen, setIsTimeModalOpen] = useState(false)
   const [activeTimeIndex, setActiveTimeIndex] = useState(null)
 
   useEffect(() => {
     if (isEditing) {
       setName(item.name)
-      setTimes(item.times ?? [])
+      setTimes(
+        item.times && item.times.length > 0 ? item.times : [{ id: `temp-${Date.now()}`, time: '' }],
+      )
     }
-  }, [isEditing])
+  }, [isEditing, item])
 
   // 시간 선택 모달
   const handleModal = (index) => {
@@ -25,11 +29,12 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
 
   // 시간 추가 버튼
   const handleAddTime = () => {
-    if (times.some((t) => !t.time)) {
-      alert('기존 시간을 먼저 선택해주세요.')
+    // 마지막 입력창이 비어있으면 추가 방지
+    if (times.length > 0 && !times[times.length - 1].time) {
+      alert('시간을 먼저 선택해주세요.')
       return
     }
-    setTimes((prev) => [...prev, { id: null, time: '' }])
+    setTimes((prev) => [...prev, { id: `temp-${Date.now()}`, time: '' }])
   }
 
   // 카드 저장 버튼
@@ -67,7 +72,7 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
               <p className='font-medium text-[23px]'>복용 시간</p>
               {times.map((t, index) => (
                 <button
-                  key={t.id}
+                  key={t.id || index}
                   type='button'
                   onClick={() => handleModal(index)}
                   className='flex flex-row justify-between px-[25px] py-[17px] font-semibold text-[18px] bg-white rounded-[10px] border-[1.50px] border-[#B3B3B3]  cursor-pointer'
