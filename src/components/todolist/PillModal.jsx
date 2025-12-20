@@ -1,57 +1,55 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import ModalBase from './ModalBase'
 import CheckListSection from './CheckListSection'
 
-// 더미데이터
-const pillDummy = {
-  morning: [
-    {
-      id: 'm1',
-      name: '혈압약',
-      time: '아침 09:00',
-      checked: false,
-    },
-    {
-      id: 'm2',
-      name: '비타민 D',
-      time: '아침 10:00',
-      checked: false,
-    },
-  ],
-
-  lunch: [
-    {
-      id: 'm3',
-      name: '오메가3',
-      time: '낮 12:00',
-      checked: false,
-    },
-  ],
-
-  dinner: [
-    {
-      id: 'm4',
-      name: '치매 처방약',
-      time: '저녁 7:00',
-      checked: false,
-    },
-  ],
-}
-
 function PillModal({ onClose, allChecked }) {
-  const [morning, setMorning] = useState(pillDummy.morning)
-  const [lunch, setLunch] = useState(pillDummy.lunch)
-  const [dinner, setDinner] = useState(pillDummy.dinner)
+  const [morning, setMorning] = useState([])
+  const [lunch, setLunch] = useState([])
+  const [dinner, setDinner] = useState([])
 
-  // 확인 버튼
-  const handleConfirm = () => {
+  const apiUrl = import.meta.env.VITE_API_BASE_URL
+  const accessToken = localStorage.getItem('accessToken')
+
+  // 오늘 복용약 불러오는 함수
+  const getTodayMedicines = async () => {
+    try {
+      const res = await axios.get(`${apiUrl}/api/medicines/today`)
+      const { morningMedicines, noonMedicines, eveningMedicines } = res.data.data
+      const allItems = [...morningMedicines, ...noonMedicines, ...eveningMedicines]
+
+      const isAnyTaken = allItems.some((item) => item.isTaken)
+      allChecked(isAnyTaken)
+
+      setMorning(morningMedicines)
+      setLunch(noonMedicines)
+      setDinner(eveningMedicines)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+  // 모달창 확인 버튼
+  const handleConfirm = async () => {
     const allItems = [...morning, ...lunch, ...dinner]
 
-    const isAllChecked = allItems.every((item) => item.checked === true)
+    // 체크한 약 id만 추출
+    const takenIds = allItems.filter((item) => item.isTaken).map((item) => item.id)
 
-    allChecked(isAllChecked)
-    onClose()
+    try {
+      await axios.post(`${apiUrl}/api/medicines/today`, {
+        medicineIntakeTimeIds: takenIds,
+      })
+
+      onClose()
+    } catch (err) {
+      console.error(err)
+    }
   }
+
+  useEffect(() => {
+    getTodayMedicines()
+  }, [])
+
   return (
     <>
       <ModalBase

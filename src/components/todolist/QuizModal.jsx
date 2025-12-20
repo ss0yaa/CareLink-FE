@@ -42,6 +42,7 @@ function QuizModal({ onClose, allChecked }) {
     setIsAnswered(true)
     allChecked(true)
   }
+
   return (
     <>
       <ModalBase
@@ -62,7 +63,7 @@ function QuizModal({ onClose, allChecked }) {
                 text={q.text}
                 onClick={() => handleSelect(q.id)}
                 disabled={isAnswered}
-                isSelected={~isAnswered && isSelected}
+                isSelected={!isAnswered && isSelected}
                 isCorrect={isAnswered && isCorrect} // 정답 버튼
                 isWrong={isAnswered && isSelected && !isCorrect} // 오답 버튼
               />

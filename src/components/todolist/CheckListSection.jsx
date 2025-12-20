@@ -2,13 +2,13 @@ import React from 'react'
 import CheckOn from '@/assets/icons/icon-small-checked-on.svg'
 import CheckOff from '@/assets/icons/icon-small-checked-off.svg'
 
-function CheckList({ title, items, onChange }) {
+function CheckListSection({ title, items, onChange }) {
   const handleClick = (id) => {
     const newItems = items.map((item) => {
       if (item.id === id) {
         return {
           ...item,
-          checked: !item.checked,
+          isTaken: !item.isTaken,
         }
       }
       return item
@@ -26,9 +26,13 @@ function CheckList({ title, items, onChange }) {
       {/* 체크 리스트 */}
       <div className='flex flex-col gap-5 mt-[25px]'>
         {items.map((item) => (
-          <div className='grid grid-cols-[61px_140px_1fr]'>
+          <div key={item.id} className='grid grid-cols-[61px_140px_1fr]'>
             <button type='button' onClick={() => handleClick(item.id)} className='cursor-pointer'>
-              {item.checked ? <img src={CheckOn} /> : <img src={CheckOff} />}
+              {item.isTaken ? (
+                <img src={CheckOn} alt='checked' />
+              ) : (
+                <img src={CheckOff} alt='unchecked' />
+              )}
             </button>
             <p className='text-[25px]'>{item.name}</p>
             <p className='text-[25px]'>({item.time})</p>
@@ -39,4 +43,4 @@ function CheckList({ title, items, onChange }) {
   )
 }
 
-export default CheckList
+export default CheckListSection

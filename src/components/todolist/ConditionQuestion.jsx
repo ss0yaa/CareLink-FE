@@ -11,8 +11,8 @@ function ConditionQuestion({ title, options, type, selected, onSelect }) {
             key={opt.value}
             label={opt.label}
             icon={type === 'icon' ? opt.src : null}
-            isSelected={selected === opt.value}
-            onClick={() => onSelect(opt.value)}
+            isSelected={selected === opt.score}
+            onClick={() => onSelect(opt.score)}
           />
         ))}
       </div>
