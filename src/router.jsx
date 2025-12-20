@@ -16,6 +16,10 @@ import SignupPage from './pages/signup/SignupPage'
 import SignupResultPage from './pages/signup/SignupResultPage'
 //대시보드
 import DashboardPage from './pages/dashboard/DashboardPage'
+//일기
+import DiaryWritePage from './pages/diary/DiaryWritePage'
+import DiaryListPage from './pages/diary/DiaryListPage'
+import DiaryDetailPage from './pages/diary/DiaryDetailPage'
 
 const router = createBrowserRouter([
   {
@@ -66,6 +70,21 @@ const router = createBrowserRouter([
     path: '/dashboard',
     element: <App />,
     children: [{ index: true, element: <DashboardPage /> }],
+  },
+  {
+    path: '/diary',
+    element: <App />,
+    children: [
+      { index: true, element: <DiaryWritePage /> },
+      {
+        path: 'list',
+        element: <DiaryListPage />,
+      },
+      {
+        path: ':diaryId',
+        element: <DiaryDetailPage />,
+      },
+    ],
   },
 ])
 
