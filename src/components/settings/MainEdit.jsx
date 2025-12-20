@@ -30,7 +30,7 @@ function MainEdit() {
     getMedicines()
   }, [])
 
-  // 2. 약 추가
+  // 2. 약 추가 버튼 (임시 카드)
   const handleAdd = () => {
     const tempItem = {
       id: Date.now(),
@@ -50,9 +50,6 @@ function MainEdit() {
         { name, times: times.map((t) => t.time) },
         { headers: { Authorization: `Bearer ${accessToken}` } },
       )
-
-      // medicineId 반환
-      return res.data.data
     } catch (err) {
       console.error(err)
     }
@@ -60,9 +57,12 @@ function MainEdit() {
 
   const handleSave = async (tempId, { name, times }) => {
     try {
-      const newItem = await handleAddMedicine({ name, times })
-      setMedicines((prev) => prev.filter((item) => item.id !== tempId).concat(newItem))
+      await handleAddMedicine({ name, times })
+      // 임시 카드 제거
+      setMedicines((prev) => prev.filter((item) => item.id !== tempId))
       setEditingId(null)
+
+      await getMedicines()
     } catch (err) {
       alert('약 추가 실패')
       console.error(err)
@@ -75,11 +75,21 @@ function MainEdit() {
   }
 
   // 5. 약 정보 삭제
-  const handleDelete = (id) => {
-    setMedicines((prev) => prev.filter((item) => item.id !== id))
+  const handleDelete = async (medicineId) => {
+    try {
+      await axios.delete(`${apiUrl}/api/medicines/${medicineId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
 
-    if (editingId === id) {
-      setEditingId(null)
+      setMedicines((prev) => prev.filter((item) => item.id !== medicineId))
+      if (editingId === medicineId) {
+        setEditingId(null)
+      }
+    } catch (err) {
+      alert('약 삭제 실패')
+      console.error(err)
     }
   }
 
