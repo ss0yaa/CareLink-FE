@@ -23,7 +23,28 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
 
   // 시간 추가 버튼
   const handleAddTime = () => {
+    if (times.some((t) => !t.trim())) {
+      alert('기존 시간을 먼저 선택해주세요.')
+      return
+    }
     setTimes((prev) => [...prev, ''])
+  }
+
+  // 카드 저장 버튼
+  const handleSaveClick = () => {
+    if (!name.trim()) {
+      alert('약 이름을 입력해주세요.')
+      return
+    }
+    if (times.length === 0 || times.some((t) => !t.trim())) {
+      alert('복용 시간을 모두 입력해주세요.')
+      return
+    }
+
+    onSave(item.id, {
+      name,
+      times,
+    })
   }
   return (
     <div className='w-[700px] relative mx-auto'>
@@ -65,7 +86,7 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
             </button>
             <button
               type='button'
-              onClick={() => onSave(item.id, { name, times })}
+              onClick={handleSaveClick}
               className='mt-[50px] py-[11px] font-semibold text-[23px] text-white bg-primary rounded-[10px] cursor-pointer'
             >
               저장하기
