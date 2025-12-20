@@ -32,6 +32,10 @@ function MainEdit() {
 
   // 2. 약 추가 버튼 (임시 카드)
   const handleAdd = () => {
+    if (editingId) {
+      alert('현재 작성 중인 내용을 먼저 저장해주세요.')
+      return
+    }
     const tempItem = {
       id: Date.now(),
       name: '',
@@ -42,29 +46,31 @@ function MainEdit() {
     setEditingId(tempItem.id)
   }
 
-  // 3. 약 정보 저장
-  const handleAddMedicine = async ({ name, times }) => {
+  // 3. 약 정보 저장 (새로 등록 or 수정)
+  const handleSave = async (id, payload) => {
     try {
-      const res = await axios.post(
-        `${apiUrl}/api/medicines`,
-        { name, times: times.map((t) => t.time) },
-        { headers: { Authorization: `Bearer ${accessToken}` } },
-      )
-    } catch (err) {
-      console.error(err)
-    }
-  }
+      const isNew = typeof id === 'number' && id > 1000000000
 
-  const handleSave = async (tempId, { name, times }) => {
-    try {
-      await handleAddMedicine({ name, times })
-      // 임시 카드 제거
-      setMedicines((prev) => prev.filter((item) => item.id !== tempId))
+      if (isNew) {
+        // 약 정보 새로 등록
+        await axios.post(
+          `${apiUrl}/api/medicines`,
+          {
+            name: payload.name,
+            times: payload.newIntakeTimes.map((t) => t.time),
+          },
+          { headers: { Authorization: `Bearer ${accessToken}` } },
+        )
+      } else {
+        // 약 정보 수정
+        await axios.put(`${apiUrl}/api/medicines/${id}`, payload, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+      }
+
       setEditingId(null)
-
       await getMedicines()
     } catch (err) {
-      alert('약 추가 실패')
       console.error(err)
     }
   }

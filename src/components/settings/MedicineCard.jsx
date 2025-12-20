@@ -6,18 +6,18 @@ import TimePicker from './TimePicker'
 
 function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
   const [name, setName] = useState(item.name)
-  const [times, setTimes] = useState(
-    item.times && item.times.length > 0 ? item.times : [{ id: null, time: '' }],
-  )
+  const [times, setTimes] = useState([]) // {timeId, time} 형태로 저장
   const [isTimeModalOpen, setIsTimeModalOpen] = useState(false)
   const [activeTimeIndex, setActiveTimeIndex] = useState(null)
 
   useEffect(() => {
     if (isEditing) {
       setName(item.name)
-      setTimes(
-        item.times && item.times.length > 0 ? item.times : [{ id: `temp-${Date.now()}`, time: '' }],
-      )
+      if (item.times && item.times.length > 0) {
+        setTimes(item.times.map((t) => ({ timeId: t.timeId || t.id, time: t.time })))
+      } else {
+        setTimes([{ timeId: null, time: '' }])
+      }
     }
   }, [isEditing, item])
 
@@ -34,10 +34,11 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
       alert('시간을 먼저 선택해주세요.')
       return
     }
-    setTimes((prev) => [...prev, { id: `temp-${Date.now()}`, time: '' }])
+    // 새로 추가하는 시간은 timeId를 null로 설정
+    setTimes((prev) => [...prev, { timeId: null, time: '' }])
   }
 
-  // 카드 저장 버튼
+  // 카드 저장 버튼 (새로 등록 vs 수정 구분)
   const handleSaveClick = () => {
     if (!name.trim()) {
       alert('약 이름을 입력해주세요.')
@@ -48,10 +49,39 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
       return
     }
 
-    onSave(item.id, {
-      name,
-      times,
-    })
+    const isNew = typeof item.id === 'number' && item.id > 1000000000
+
+    if (isNew) {
+      // 신규 등록의 경우 전체 데이터 전달
+      onSave(item.id, {
+        name,
+        newIntakeTimes: times.map((t) => ({ timeId: null, time: t.time })),
+      })
+    } else {
+      // 수정한 값만 payload로 구성
+      const payload = {}
+      const isNameChanged = name !== item.name
+
+      // 시간 데이터 변경 확인
+      const originalTimes = item.times?.map((t) => ({ timeId: t.timeId, time: t.time })) || []
+      const isTimesChanged = JSON.stringify(times) !== JSON.stringify(originalTimes)
+
+      if (isNameChanged) payload.name = name
+      if (isTimesChanged) {
+        payload.newIntakeTimes = times.map((t) => ({
+          // 새로 추가된 시간은 timeId가 null 로 채워짐
+          timeId: t.timeId || null,
+          time: t.time,
+        }))
+      }
+
+      // 변경사항 없으면 api 호출하지 않음
+      if (Object.keys(payload).length === 0) {
+        return onEdit(null)
+      }
+
+      onSave(item.id, payload)
+    }
   }
   return (
     <div className='w-[700px] relative mx-auto'>
