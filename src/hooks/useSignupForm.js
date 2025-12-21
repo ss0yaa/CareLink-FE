@@ -22,14 +22,68 @@ const initialForm = {
   },
 }
 
+const initialCheck = {
+  phoneDup: { status: 'idle', message: '' }, // idle(대기) | loading(로딩중) | ok(확인) | fail(실패)
+  phoneVerifiedValue: '', // 중복확인 완료된 phone 값
+}
+
 export const useSignupForm = () => {
   const [step, setStep] = useState(1)
   const [form, setForm] = useState(initialForm)
+  const [check, setCheck] = useState(initialCheck)
 
   //입력 필드 업데이트
   const setField = useCallback((key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }))
+
+    if (key === 'phoneNum') {
+      setCheck((prev) => ({
+        ...prev,
+        phoneDup: { status: 'idle', message: '' },
+        phoneVerifiedValue: '',
+      }))
+    }
   }, [])
+
+  //아이디 중복 확인
+  const checkId = useCallback(async () => {
+    const phone = form.phoneNum.trim()
+    if (!phone) {
+      setCheck((prev) => ({
+        ...prev,
+        phoneDup: { status: 'fail', message: '휴대폰 번호를 입력해주세요.' },
+      }))
+      return
+    }
+
+    try {
+      setCheck((prev) => ({ ...prev, phoneDup: { status: 'loading', message: '' } }))
+
+      //api 추가 예정
+      //const isDuplicate = res.data.data
+
+      const isDuplicate = false //임의 예시
+
+      if (isDuplicate) {
+        setCheck((prev) => ({
+          ...prev,
+          phoneDup: { status: 'fail', message: '사용 불가능한 아이디입니다.' },
+          phoneVerifiedValue: '',
+        }))
+      } else {
+        setCheck((prev) => ({
+          ...prev,
+          phoneDup: { status: 'ok', message: '사용 가능한 아이디입니다.' },
+          phoneVerifiedValue: phone,
+        }))
+      }
+    } catch (e) {
+      setCheck((prev) => ({
+        ...prev,
+        phoneDup: { status: 'fail', message: '중복확인에 실패했어요. 다시 시도해주세요.' },
+      }))
+    }
+  }, [form.phoneNum])
 
   //인지 상태 선택
   const setCog = useCallback((key, value) => {
@@ -74,6 +128,8 @@ export const useSignupForm = () => {
       if (form.password !== form.passwordConfirm) return false
       if (!form.birthday.trim()) return false
       if (!form.cognitiveState) return false
+      if (check.phoneDup.status !== 'ok') return false
+      if (check.phoneVerifiedValue !== form.phoneNum.trim()) return false
       return true
     }
     if (step === 2) {
@@ -87,7 +143,7 @@ export const useSignupForm = () => {
       return service && privacy && sensitive && thirdParty
     }
     return true
-  }, [step, form])
+  }, [step, form, check])
 
   const next = useCallback(() => {
     if (!canGoNext) return
@@ -98,5 +154,17 @@ export const useSignupForm = () => {
     setStep((s) => Math.max(s - 1, 1))
   }, [])
 
-  return { step, form, setField, setCog, toggleInterest, toggleAgree, canGoNext, next, prev }
+  return {
+    step,
+    form,
+    setField,
+    setCog,
+    toggleInterest,
+    toggleAgree,
+    canGoNext,
+    next,
+    prev,
+    check,
+    checkId,
+  }
 }
