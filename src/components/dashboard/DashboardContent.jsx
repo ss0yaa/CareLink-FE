@@ -8,7 +8,7 @@ import InfoCard from './InfoCard'
 
 const DashboardContent = () => {
   return (
-    <div className='px-[50px] py-[30px] w-full'>
+    <div className='flex-1 bg-background px-[50px] py-[30px]'>
       <div>
         <h1 className='font-semibold text-[40px] text-black pb-6'>종합 대시보드</h1>
       </div>

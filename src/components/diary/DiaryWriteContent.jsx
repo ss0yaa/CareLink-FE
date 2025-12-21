@@ -10,7 +10,7 @@ const DiaryWriteContent = () => {
   const formattedDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`
 
   return (
-    <div className='px-[50px] py-[30px] w-full overflow-y-auto flex flex-col gap-5'>
+    <div className='flex-1 bg-background px-[50px] py-[30px] overflow-y-auto flex flex-col gap-5'>
       <div>
         <h1 className='font-semibold text-[40px] text-black pb-3'>일기</h1>
         <div className='flex items-center'>
