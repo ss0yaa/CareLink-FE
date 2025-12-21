@@ -15,7 +15,7 @@ function AlertPillModal() {
     <div className='fixed inset-0 z-50 flex items-center justify-center w-full h-full '>
       <div className='absolute inset-0 shadow-[0px_1px_5px_3px_rgba(0,0,0,0.25)] backdrop-blur-sm' />
       <div
-        className={`relative flex flex-col items-center justify-center gap-[48px] m-auto px-[95px] py-[65px] bg-white shadow-[0px_1px_5px_3px_rgba(0,0,0,0.25)] rounded-[25px] overflow-y-auto `}
+        className={`relative flex flex-col items-center justify-center gap-12 m-auto px-[95px] py-[65px] bg-white shadow-[0px_1px_5px_3px_rgba(0,0,0,0.25)] rounded-[25px] overflow-y-auto `}
       >
         <div className='flex flex-col items-center justify-center gap-2.5'>
           <p className='font-semibold text-[40px]'>약 복용 확인</p>
