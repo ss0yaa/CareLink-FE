@@ -6,15 +6,21 @@ import TimePicker from './TimePicker'
 
 function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
   const [name, setName] = useState(item.name)
-  const [times, setTimes] = useState(item.time ? [item.time] : [''])
+  const [times, setTimes] = useState([]) // {timeId, time} 형태로 저장
   const [isTimeModalOpen, setIsTimeModalOpen] = useState(false)
   const [activeTimeIndex, setActiveTimeIndex] = useState(null)
+
   useEffect(() => {
     if (isEditing) {
       setName(item.name)
-      setTimes(item.time ? [item.time] : [''])
+      if (item.times && item.times.length > 0) {
+        setTimes(item.times.map((t) => ({ timeId: t.timeId || t.id, time: t.time })))
+      } else {
+        setTimes([{ timeId: null, time: '' }])
+      }
     }
-  }, [isEditing, item.name, item.time])
+  }, [isEditing, item])
+
   // 시간 선택 모달
   const handleModal = (index) => {
     setActiveTimeIndex(index)
@@ -23,7 +29,59 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
 
   // 시간 추가 버튼
   const handleAddTime = () => {
-    setTimes((prev) => [...prev, ''])
+    // 마지막 입력창이 비어있으면 추가 방지
+    if (times.length > 0 && !times[times.length - 1].time) {
+      alert('시간을 먼저 선택해주세요.')
+      return
+    }
+    // 새로 추가하는 시간은 timeId를 null로 설정
+    setTimes((prev) => [...prev, { timeId: null, time: '' }])
+  }
+
+  // 카드 저장 버튼 (새로 등록 vs 수정 구분)
+  const handleSaveClick = () => {
+    if (!name.trim()) {
+      alert('약 이름을 입력해주세요.')
+      return
+    }
+    if (times.length === 0 || times.some((t) => !t.time)) {
+      alert('복용 시간을 모두 입력해주세요.')
+      return
+    }
+
+    const isNew = typeof item.id === 'number' && item.id > 1000000000
+
+    if (isNew) {
+      // 신규 등록의 경우 전체 데이터 전달
+      onSave(item.id, {
+        name,
+        newIntakeTimes: times.map((t) => ({ timeId: null, time: t.time })),
+      })
+    } else {
+      // 수정한 값만 payload로 구성
+      const payload = {}
+      const isNameChanged = name !== item.name
+
+      // 시간 데이터 변경 확인
+      const originalTimes = item.times?.map((t) => ({ timeId: t.timeId, time: t.time })) || []
+      const isTimesChanged = JSON.stringify(times) !== JSON.stringify(originalTimes)
+
+      if (isNameChanged) payload.name = name
+      if (isTimesChanged) {
+        payload.newIntakeTimes = times.map((t) => ({
+          // 새로 추가된 시간은 timeId가 null 로 채워짐
+          timeId: t.timeId || null,
+          time: t.time,
+        }))
+      }
+
+      // 변경사항 없으면 api 호출하지 않음
+      if (Object.keys(payload).length === 0) {
+        return onEdit(null)
+      }
+
+      onSave(item.id, payload)
+    }
   }
   return (
     <div className='w-[700px] relative mx-auto'>
@@ -42,15 +100,15 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
             </div>
             <div className='flex flex-col gap-2.5 mt-[30px]'>
               <p className='font-medium text-[23px]'>복용 시간</p>
-              {times.map((time, index) => (
+              {times.map((t, index) => (
                 <button
-                  key={index}
+                  key={t.id || index}
                   type='button'
                   onClick={() => handleModal(index)}
                   className='flex flex-row justify-between px-[25px] py-[17px] font-semibold text-[18px] bg-white rounded-[10px] border-[1.50px] border-[#B3B3B3]  cursor-pointer'
                 >
-                  <p className={time ? 'text-black' : 'text-[#B3B3B3]'}>
-                    {time || '시간을 선택해주세요.'}
+                  <p className={t.time ? 'text-black' : 'text-[#B3B3B3]'}>
+                    {t.time || '시간을 선택해주세요.'}
                   </p>
                   <img src={IconSelect} />
                 </button>
@@ -65,7 +123,7 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
             </button>
             <button
               type='button'
-              onClick={() => onSave(item.id, { name, times })}
+              onClick={handleSaveClick}
               className='mt-[50px] py-[11px] font-semibold text-[23px] text-white bg-primary rounded-[10px] cursor-pointer'
             >
               저장하기
@@ -81,20 +139,16 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
             </div>
             <div className='flex flex-col gap-2.5 mt-[30px]'>
               <p className='font-medium text-[23px]'>복용시간</p>
-              {item.times && item.times.length > 0 ? (
-                item.times.map((t, i) => (
+              {item.times &&
+                item.times.length > 0 &&
+                item.times.map((t) => (
                   <div
-                    key={i}
+                    key={t.id}
                     className='px-[25px] py-[17px] font-semibold text-[18px] bg-white rounded-[10px] border-[1.50px] border-[#B3B3B3] mb-2'
                   >
-                    {t}
+                    {t.time}
                   </div>
-                ))
-              ) : (
-                <div className='px-[25px] py-[17px] font-semibold text-[18px] bg-white rounded-[10px] border-[1.50px] border-[#B3B3B3]'>
-                  {item.time || '시간 정보 없음'}
-                </div>
-              )}
+                ))}
             </div>
           </>
         )}
@@ -113,7 +167,9 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
         isOpen={isTimeModalOpen}
         onClose={() => setIsTimeModalOpen(false)}
         onConfirm={(selectedTime) => {
-          setTimes((prev) => prev.map((t, i) => (i === activeTimeIndex ? selectedTime : t)))
+          setTimes((prev) =>
+            prev.map((t, i) => (i === activeTimeIndex ? { ...t, time: selectedTime } : t)),
+          )
           setIsTimeModalOpen(false)
         }}
       />

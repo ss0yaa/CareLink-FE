@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import Title from '../common/Title'
 import Subtitle from '../common/Subtitle'
 import MedicineCard from './MedicineCard'
@@ -7,29 +8,71 @@ function MainEdit() {
   const [medicines, setMedicines] = useState([])
   const [editingId, setEditingId] = useState(null)
 
+  const apiUrl = import.meta.env.VITE_API_BASE_URL
+  const accessToken = localStorage.getItem('accessToken')
+
   // 1. 약 정보 조회
-  useEffect(() => {
-    setMedicines([])
-  }, [])
+  const getMedicines = async () => {
+    try {
+      const res = await axios.get(`${apiUrl}/api/medicines`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
 
-  // 2. 약 추가
-  const handleAdd = () => {
-    const newItem = {
-      id: Date.now(),
-      name: '',
-      time: '',
+      setMedicines(res.data.data)
+    } catch (err) {
+      console.error(err)
     }
-
-    setMedicines((prev) => [...prev, newItem])
-    setEditingId(newItem.id)
   }
 
-  // 3. 약 정보 저장
-  const handleSave = (id, updatedData) => {
-    setMedicines((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, ...updatedData } : item)),
-    )
-    setEditingId(null)
+  useEffect(() => {
+    getMedicines()
+  }, [])
+
+  // 2. 약 추가 버튼 (임시 카드)
+  const handleAdd = () => {
+    if (editingId) {
+      alert('현재 작성 중인 내용을 먼저 저장해주세요.')
+      return
+    }
+    const tempItem = {
+      id: Date.now(),
+      name: '',
+      times: [],
+    }
+
+    setMedicines((prev) => [...prev, tempItem])
+    setEditingId(tempItem.id)
+  }
+
+  // 3. 약 정보 저장 (새로 등록 or 수정)
+  const handleSave = async (id, payload) => {
+    try {
+      const isNew = typeof id === 'number' && id > 1000000000
+
+      if (isNew) {
+        // 약 정보 새로 등록
+        await axios.post(
+          `${apiUrl}/api/medicines`,
+          {
+            name: payload.name,
+            times: payload.newIntakeTimes.map((t) => t.time),
+          },
+          { headers: { Authorization: `Bearer ${accessToken}` } },
+        )
+      } else {
+        // 약 정보 수정
+        await axios.put(`${apiUrl}/api/medicines/${id}`, payload, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+      }
+
+      setEditingId(null)
+      await getMedicines()
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   // 4. 약 정보 수정
@@ -38,11 +81,21 @@ function MainEdit() {
   }
 
   // 5. 약 정보 삭제
-  const handleDelete = (id) => {
-    setMedicines((prev) => prev.filter((item) => item.id !== id))
+  const handleDelete = async (medicineId) => {
+    try {
+      await axios.delete(`${apiUrl}/api/medicines/${medicineId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
 
-    if (editingId === id) {
-      setEditingId(null)
+      setMedicines((prev) => prev.filter((item) => item.id !== medicineId))
+      if (editingId === medicineId) {
+        setEditingId(null)
+      }
+    } catch (err) {
+      alert('약 삭제 실패')
+      console.error(err)
     }
   }
 
