@@ -6,8 +6,19 @@ import StepActions from '@/components/signup/StepActions'
 import { useSignupForm } from '@/hooks/useSignupForm'
 
 const SignupPage = () => {
-  const { step, form, setField, setCog, toggleInterest, toggleAgree, canGoNext, next, prev } =
-    useSignupForm()
+  const {
+    step,
+    form,
+    setField,
+    setCog,
+    toggleInterest,
+    toggleAgree,
+    canGoNext,
+    next,
+    prev,
+    check,
+    checkId,
+  } = useSignupForm()
   return (
     <div className='flex flex-col items-center relative w-full h-dvh py-11 overflow-y-auto'>
       {step === 1 && (
@@ -16,6 +27,8 @@ const SignupPage = () => {
           setField={setField}
           setCog={setCog}
           toggleInterest={toggleInterest}
+          check={check}
+          checkId={checkId}
         />
       )}
       {step === 2 && <Step2Form form={form} setField={setField} />}
