@@ -16,7 +16,7 @@ const AgreeItem = ({ required, title, checked, onToggle, onView }) => {
       <span className='flex-1'>
         [{required ? '필수' : '선택'}] {title}
       </span>
-      <button type='button' onClick={onView} className='shrink-0 underline cursor-pointer'>
+      <button type='button' onClick={onView} className='shrink-0 underline cursor-pointer pl-3'>
         보기
       </button>
     </div>
