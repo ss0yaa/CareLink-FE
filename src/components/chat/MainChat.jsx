@@ -7,25 +7,32 @@ import Loading from '../common/Loading'
 function MainChat() {
   const [isLoading, setIsLoading] = useState(false)
   // 채팅 초기 메세지
-  const [messages, setMessages] = useState([
-    {
-      id: 'default-question',
-      role: 'bot',
-      text: "안녕하세요, 숙멋사님! 오늘 하루를 시작해볼까요?\n상단의 '오늘의 할 일'을 먼저 확인해주세요.",
-    },
-  ])
+  const [messages, setMessages] = useState([])
 
   // 1. 채팅방 불러오기
   const getChatRoom = async () => {
     try {
       setIsLoading(true)
       const res = await api.get('/api/chatbot')
+      const conversations = res.data.data.conversations ?? []
 
-      const getMessages = res.data.data.conversations.flatMap((c, index) => [
+      const getMessages = conversations.flatMap((c, index) => [
         { id: `${index}-question`, role: 'user', text: c.question },
         { id: `${index}-answer`, role: 'bot', text: c.answer },
       ])
-      setMessages(getMessages)
+
+      if (getMessages.length === 0) {
+        setMessages([
+          {
+            id: 'default-question',
+            role: 'bot',
+            text: "안녕하세요, 숙멋사님! 오늘 하루를 시작해볼까요?\n상단의 '오늘의 할 일'을 먼저 확인해주세요.",
+          },
+          ...getMessages,
+        ])
+      } else {
+        setMessages(getMessages)
+      }
     } catch (err) {
       console.error(err)
     } finally {
