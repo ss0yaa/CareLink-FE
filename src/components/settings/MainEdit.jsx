@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import api from '@/apis/axios'
 import Title from '../common/Title'
 import Subtitle from '../common/Subtitle'
 import MedicineCard from './MedicineCard'
@@ -8,17 +8,10 @@ function MainEdit() {
   const [medicines, setMedicines] = useState([])
   const [editingId, setEditingId] = useState(null)
 
-  const apiUrl = import.meta.env.VITE_API_BASE_URL
-  const accessToken = localStorage.getItem('accessToken')
-
   // 1. 약 정보 조회
   const getMedicines = async () => {
     try {
-      const res = await axios.get(`${apiUrl}/api/medicines`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      const res = await api.get('/api/medicines')
 
       setMedicines(res.data.data)
     } catch (err) {
@@ -53,19 +46,13 @@ function MainEdit() {
 
       if (isNew) {
         // 약 정보 새로 등록
-        await axios.post(
-          `${apiUrl}/api/medicines`,
-          {
-            name: payload.name,
-            times: payload.newIntakeTimes.map((t) => t.time),
-          },
-          { headers: { Authorization: `Bearer ${accessToken}` } },
-        )
+        await api.post('/api/medicines', {
+          name: payload.name,
+          times: payload.newIntakeTimes.map((t) => t.time),
+        })
       } else {
         // 약 정보 수정
-        await axios.put(`${apiUrl}/api/medicines/${id}`, payload, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+        await api.put('/api/medicines/${id}', payload)
       }
 
       setEditingId(null)
@@ -83,11 +70,7 @@ function MainEdit() {
   // 5. 약 정보 삭제
   const handleDelete = async (medicineId) => {
     try {
-      await axios.delete(`${apiUrl}/api/medicines/${medicineId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      await api.delete(`${apiUrl}/api/medicines/${medicineId}`)
 
       setMedicines((prev) => prev.filter((item) => item.id !== medicineId))
       if (editingId === medicineId) {

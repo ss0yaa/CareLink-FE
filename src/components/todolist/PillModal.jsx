@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import api from '@/apis/axios'
 import ModalBase from './ModalBase'
 import CheckListSection from './CheckListSection'
 import AlertPillModal from './AlertPillModal'
@@ -12,14 +12,11 @@ function PillModal({ onClose, allChecked }) {
   const [isEmpty, setIsEmpty] = useState(true) // 약 정보 등록 여부
   const [isLoading, setIsLoading] = useState(false)
 
-  const apiUrl = import.meta.env.VITE_API_BASE_URL
-  const accessToken = localStorage.getItem('accessToken')
-
   // 오늘 복용약 불러오는 함수
   const getTodayMedicines = async () => {
     try {
       setIsLoading(true)
-      const res = await axios.get(`${apiUrl}/api/medicines/today`)
+      const res = await api.get('/api/medicines/today')
       const { morningMedicines, noonMedicines, eveningMedicines } = res.data.data
 
       const count = morningMedicines.length + noonMedicines.length + eveningMedicines.length
@@ -49,7 +46,7 @@ function PillModal({ onClose, allChecked }) {
     const takenIds = allItems.filter((item) => item.isTaken).map((item) => item.id)
 
     try {
-      await axios.post(`${apiUrl}/api/medicines/today`, {
+      await api.post('/api/medicines/today', {
         medicineIntakeTimeIds: takenIds,
       })
 

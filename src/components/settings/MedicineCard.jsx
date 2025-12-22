@@ -102,7 +102,7 @@ function MedicineCard({ item, isEditing, onSave, onEdit, onDelete }) {
               <p className='font-medium text-[23px]'>복용 시간</p>
               {times.map((t, index) => (
                 <button
-                  key={t.id || index}
+                  key={t.timeId ?? index}
                   type='button'
                   onClick={() => handleModal(index)}
                   className='flex flex-row justify-between px-[25px] py-[17px] font-semibold text-[18px] bg-white rounded-[10px] border-[1.50px] border-[#B3B3B3]  cursor-pointer'
