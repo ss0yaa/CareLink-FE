@@ -4,7 +4,7 @@ import SignupTitle from './SignupTitle'
 import SelectChip from './SelectChip'
 import IdSignupField from './IdSignupField'
 
-const Step1Form = ({ form, setField, setCog, toggleInterest, check, checkId }) => {
+const Step1Form = ({ form, setField, setBirthday, setCog, toggleInterest, check, checkId }) => {
   const COGNITIVE_OPTIONS = [
     { id: 'SUSPECTED', label: '치매 의심' },
     { id: 'MILD', label: '치매 경도' },
@@ -45,7 +45,7 @@ const Step1Form = ({ form, setField, setCog, toggleInterest, check, checkId }) =
           <TextField
             label='비밀번호'
             type='password'
-            placeholder='4자리의 숫자'
+            placeholder='4자리 이상 숫자'
             value={form.password}
             onChange={(e) => setField('password', e.target.value)}
           />
@@ -61,7 +61,7 @@ const Step1Form = ({ form, setField, setCog, toggleInterest, check, checkId }) =
             type='text'
             placeholder='생년월일 8자리를 입력해주세요.'
             value={form.birthday}
-            onChange={(e) => setField('birthday', e.target.value)}
+            onChange={(e) => setBirthday(e.target.value)}
           />
         </div>
         <div className='grid gap-12 mt-12'>

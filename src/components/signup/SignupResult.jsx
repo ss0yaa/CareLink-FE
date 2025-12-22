@@ -1,9 +1,32 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import check from '@/assets/icons/icon-agree-on.svg'
+import { login } from '@/apis/auth'
 
 const SignupResult = () => {
   const navigate = useNavigate()
+  const location = useLocation()
+  const { phoneNum, password } = location.state || {}
+
+  const handleStart = async () => {
+    if (!phoneNum || !password) {
+      navigate('/login')
+      return
+    }
+
+    try {
+      const res = await login({ phoneNum, password })
+      const { accessToken, refreshToken } = res.data.data
+
+      localStorage.setItem('accessToken', accessToken)
+      localStorage.setItem('refreshToken', refreshToken)
+
+      navigate('/chat')
+    } catch (err) {
+      console.log(err?.response?.data?.message || '자동 로그인에 실패했습니다.')
+      navigate('/login')
+    }
+  }
 
   return (
     <div className='shadow-[0_2px_2px_3px_rgba(0,0,0,0.25)] inset-shadow-[0_2px_2px_0_rgba(0,0,0,0.25)] rounded-[25px] px-52 py-24'>
@@ -30,7 +53,7 @@ const SignupResult = () => {
           <button
             type='button'
             className='mt-[50px] bg-primary rounded-[10px] px-[100px] py-5 font-semibold text-[23px] text-white cursor-pointer'
-            onClick={() => navigate(`/`)}
+            onClick={handleStart}
           >
             시작하기
           </button>
