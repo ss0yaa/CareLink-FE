@@ -1,14 +1,14 @@
 import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
-function BigArticleCard({ img, title, time }) {
+function BigArticleCard({ newsId, img, title, time }) {
   const navigate = useNavigate()
   const { newsId } = useParams()
 
   return (
     <div
+      onClick={() => navigate(`/training/article/${newsId}`)}
       className='w-80 h-80 flex flex-col gap-2.5 p-5 rounded-[20px] bg-[#E8E8E8] cursor-pointer'
-      onClick={() => navigate(`/training/article`)} // 임시 경로
     >
       <img className='pb-2.5' src={img} />
       <p className='font-semibold text-[20px] line-clamp-1'>{title}</p>

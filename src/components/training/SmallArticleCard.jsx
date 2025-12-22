@@ -1,8 +1,13 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const SmallArticleCard = ({ img, title, subtitle, time }) => {
+const SmallArticleCard = ({ newsId, img, title, subtitle, time }) => {
+  const navigate = useNavigate()
   return (
-    <div className='w-64 h-80 flex flex-col  gap-2.5 py-5 px-[15px] rounded-[20px] bg-[#E8E8E8] cursor-pointer'>
+    <div
+      onClick={() => navigate(`/training/article/${newsId}`)}
+      className='w-64 h-80 flex flex-col  gap-2.5 py-5 px-[15px] rounded-[20px] bg-[#E8E8E8] cursor-pointer'
+    >
       <img className='pb-2.5' src={img} />
       <p className='font-semibold text-[20px] pb-[5px] line-clamp-1'>{title}</p>
       <p className='font-normal text-[18px] line-clamp-2'>{subtitle}</p>
