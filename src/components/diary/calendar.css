@@ -1,0 +1,115 @@
+/* 감싸는 div */
+.calendar-wrap {
+  width: 100%;
+}
+
+/* 전체 캘린더 박스 */
+.react-calendar {
+  width: 100%;
+  padding: 22px 18px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow:
+    0 4px 4px 0 rgba(0, 0, 0, 0.25),
+    0 2px 2px 0 rgba(0, 0, 0, 0.25) inset;
+}
+
+/* 상단 네비게이션 */
+.react-calendar__navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 74px;
+}
+
+/* 화살표 버튼 */
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  border: 0;
+  font-size: 25px;
+  color: #444;
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.react-calendar__navigation button:enabled:hover {
+  background: #f5f7f8;
+}
+
+/* 가운데 라벨 */
+.react-calendar__navigation__label {
+  font-size: 25px;
+  font-weight: 700;
+  color: #222;
+  padding: 6px 18px;
+  flex-grow: 0 !important;
+}
+
+/* 요일 */
+.react-calendar__month-view__weekdays {
+  margin-top: 6px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 18px;
+  color: #6f6969;
+}
+
+.react-calendar__month-view__weekdays abbr {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* 날짜 영역 간격 */
+.react-calendar__month-view__days {
+  row-gap: 34px;
+}
+
+/* 날짜 칸 */
+.react-calendar__tile {
+  position: relative;
+  height: 70px;
+  padding: 12px 0 50px; /* 아래 점 자리 */
+  background: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+}
+
+.react-calendar__tile:enabled:hover {
+  background: #f5f7f8;
+}
+
+/* 오늘 기본 하이라이트 제거 (오늘도 active로 네모 표시) */
+.react-calendar__tile--now {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+/* 선택된 날짜 = 네모 테두리 */
+.react-calendar__tile--active {
+  background: transparent !important;
+  color: inherit !important;
+  box-shadow: inset 0 0 0 2px #35c6ad;
+  border-radius: 10px;
+}
+
+/* 이웃 달 날짜 (회색) */
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #c9cdd1;
+  font-weight: 500;
+}
+
+/* 점(●) */
+.cal-dot {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #35c6ad;
+}
