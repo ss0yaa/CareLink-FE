@@ -3,14 +3,10 @@ import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import './calendar.css'
 
-const CalendarContent = ({ diaryDates = [] }) => {
-  //기본 선택: 오늘(처음 로딩 시 네모가 오늘에 뜸)
+const CalendarContent = ({ diaryDates = [], onSelectDate, onMonthChange }) => {
   const [value, setValue] = useState(new Date())
-
-  //일기 작성 날짜 빠른 조회용
   const diarySet = useMemo(() => new Set(diaryDates), [diaryDates])
 
-  //Date -> "YYYY-MM-DD"
   const toKey = (date) => {
     const y = date.getFullYear()
     const m = String(date.getMonth() + 1).padStart(2, '0')
@@ -22,7 +18,10 @@ const CalendarContent = ({ diaryDates = [] }) => {
     <div className='calendar-wrap'>
       <Calendar
         value={value}
-        onChange={setValue}
+        onChange={(date) => {
+          setValue(date)
+          onSelectDate?.(date)
+        }}
         view='month'
         locale='ko-KR'
         next2Label={null}
@@ -31,6 +30,13 @@ const CalendarContent = ({ diaryDates = [] }) => {
         tileContent={({ date, view }) => {
           if (view !== 'month') return null
           return diarySet.has(toKey(date)) ? <span className='cal-dot' /> : null
+        }}
+        onActiveStartDateChange={({ activeStartDate, view }) => {
+          if (view !== 'month') return
+          onMonthChange?.({
+            year: activeStartDate.getFullYear(),
+            month: activeStartDate.getMonth() + 1,
+          })
         }}
       />
     </div>
