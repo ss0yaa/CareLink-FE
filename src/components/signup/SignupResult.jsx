@@ -10,7 +10,7 @@ const SignupResult = () => {
 
   const handleStart = async () => {
     if (!phoneNum || !password) {
-      navigate('/login')
+      navigate('/')
       return
     }
 
@@ -24,7 +24,7 @@ const SignupResult = () => {
       navigate('/chat')
     } catch (err) {
       console.log(err?.response?.data?.message || '자동 로그인에 실패했습니다.')
-      navigate('/login')
+      navigate('/')
     }
   }
 

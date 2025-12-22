@@ -1,9 +1,65 @@
-import React from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import DiaryTipCard from './DiaryTipCard'
 import CareMessageCard from './CareMessageCard'
 import CalederCard from './CalederCard'
+import CalendarContent from './CalendarContent'
+import api from '@/apis/axios'
+
+async function fetchMonthlyDiaries(year, month) {
+  const res = await api.get('/api/diary', {
+    params: { year: String(year), month: String(month) },
+  })
+  return res.data
+}
 
 const DiaryListContent = () => {
+  const today = new Date()
+
+  const [currentYM, setCurrentYM] = useState({
+    year: today.getFullYear(),
+    month: today.getMonth() + 1,
+  })
+
+  const [selectedDate, setSelectedDate] = useState(null)
+  const [diaries, setDiaries] = useState([])
+  const [careMessage, setCareMessage] = useState('')
+
+  useEffect(() => {
+    const load = async () => {
+      const data = await fetchMonthlyDiaries(currentYM.year, currentYM.month)
+
+      const list = data?.data?.diaries ?? []
+      setDiaries(list)
+      setCareMessage(data?.data?.message ?? '')
+    }
+    load()
+  }, [currentYM.year, currentYM.month])
+
+  //점 찍을 날짜 배열
+  const diaryDates = useMemo(() => diaries.map((d) => d.date), [diaries])
+
+  const selectedKey = useMemo(() => {
+    if (!selectedDate) return null
+    const y = selectedDate.getFullYear()
+    const m = String(selectedDate.getMonth() + 1).padStart(2, '0')
+    const d = String(selectedDate.getDate()).padStart(2, '0')
+    return `${y}-${m}-${d}`
+  }, [selectedDate])
+
+  //CalenderCard에 띄울 표시용 일기
+  const displayDiary = useMemo(() => {
+    if (!diaries.length) return null
+
+    //선택 날짜에 일기 있는 경우
+    if (selectedKey) {
+      const found = diaries.find((x) => x.date === selectedKey)
+      if (found) return found
+    }
+
+    //가장 최신 일기
+    return diaries.reduce((latest, cur) => (cur.date > latest.date ? cur : latest), diaries[0])
+  }, [diaries, selectedKey])
+
   return (
     <div className='px-[50px] py-[30px] w-full overflow-y-auto flex flex-col gap-5'>
       <div>
@@ -13,13 +69,17 @@ const DiaryListContent = () => {
         </p>
       </div>
       <div className='flex gap-[50px]'>
-        <div className='w-[516px] h-[702px] rounded-[15px] p-[22px] inset-shadow-[0_2px_2px_0_rgba(0,0,0,0.25)] shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]'>
-          {/*달력*/}
-        </div>
+        <CalendarContent
+          diaryDates={diaryDates}
+          onSelectDate={(date) => setSelectedDate(date)}
+          onMonthChange={({ year, month }) => {
+            setCurrentYM({ year, month })
+          }}
+        />
         <div className='flex flex-col gap-[25px]'>
           <DiaryTipCard />
-          <CareMessageCard />
-          <CalederCard />
+          <CareMessageCard message={careMessage} />
+          <CalederCard diary={displayDiary} />
         </div>
       </div>
     </div>
