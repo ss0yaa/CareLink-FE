@@ -1,7 +1,11 @@
 import React from 'react'
 import quiz from '@/assets/icons/icon-dashboard-quiz.svg'
+import Sparkline from './Sparkline'
 
 const QuizCard = () => {
+  const scores = [100, 90, 50, 45, 45, 98, 0]
+  const chartData = scores.map((v, i) => ({ x: i, y: v }))
+
   return (
     <div className='px-6 py-6 border border-[#4F46E5] rounded-[15px]'>
       <div className='flex justify-between items-center'>
@@ -11,10 +15,16 @@ const QuizCard = () => {
         </div>
       </div>
       <div>
-        <p className='font-semibold text-[28px] text-black pt-1.5'>
+        <p className='font-semibold text-[28px] text-black pt-1.5 pb-2.5'>
           <span className='text-[40px]'>100</span>점
         </p>
-        {/* 그래프 */}
+        <Sparkline
+          data={chartData}
+          color={'#6366F1'}
+          stroke={5}
+          domain={[0, 100]}
+          className='w-full h-[60px]'
+        />
         <p className='font-normal text-[15px] text-black text-end pt-5'>일주일 변화 추이</p>
       </div>
     </div>
