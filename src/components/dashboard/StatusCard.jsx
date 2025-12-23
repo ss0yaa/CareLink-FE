@@ -4,7 +4,11 @@ import diary from '@/assets/icons/icon-dashboard-dairy.svg'
 import training from '@/assets/icons/icon-dashboard-training.svg'
 import CircularProgressChart from './CircularProgressChart'
 
-const StatusCard = ({ theme }) => {
+const StatusCard = ({ theme, data }) => {
+  const percentage = data?.percentage ?? 0
+  const completedDays = data?.completedDays ?? 0
+  const todayStatus = data?.todayStatus ?? '-'
+
   const STATUS_THEME = {
     medicine: {
       title: '약 복용',
@@ -32,7 +36,7 @@ const StatusCard = ({ theme }) => {
   const { title, img, bg, iconBg, stroke } = STATUS_THEME[theme]
 
   return (
-    <div className='rounded-[15px] p-[21px] min-w-40' style={{ backgroundColor: bg }}>
+    <div className='rounded-[15px] p-[18px] min-w-40' style={{ backgroundColor: bg }}>
       <div className='flex justify-between items-center'>
         <p className='font-semibold text-lg text-black'>{title}</p>
         <div className='px-[5px] py-2.5 rounded-[15px]' style={{ backgroundColor: iconBg }}>
@@ -44,12 +48,12 @@ const StatusCard = ({ theme }) => {
         </div>
       </div>
       <div className='flex pt-[50px]'>
-        <CircularProgressChart value={20} color={stroke} />
-        <div className='pl-3.5'>
-          <p className='font-semibold text-[28px] text-black'>완료</p>
+        <CircularProgressChart value={percentage} color={stroke} />
+        <div className='pl-3'>
+          <p className='font-semibold text-[28px] text-black'>{todayStatus}</p>
           <p className='font-normal text-[15px] text-black '>
             이번 주 <br />
-            5/7회{' '}
+            {completedDays}/7회{' '}
           </p>
         </div>
       </div>
