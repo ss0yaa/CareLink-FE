@@ -33,36 +33,16 @@ export const useSignupForm = () => {
   const [form, setForm] = useState(initialForm)
   const [check, setCheck] = useState(initialCheck)
 
-  //전화번호 자동 하이픈 생성
-  const formatPhoneNumber = (value) => {
-    // 숫자만 남기기
-    const digits = value.replace(/\D/g, '').slice(0, 11)
-
-    if (digits.length <= 3) return digits
-    if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`
-    return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`
-  }
-
   //입력 필드 업데이트
   const setField = useCallback((key, value) => {
+    setForm((prev) => ({ ...prev, [key]: value }))
     if (key === 'phoneNum') {
-      const formatted = formatPhoneNumber(value)
-      setForm((prev) => ({ ...prev, phoneNum: formatted }))
       setCheck((prev) => ({
         ...prev,
         phoneDup: { status: 'idle', message: '' },
         phoneVerifiedValue: '',
       }))
-      return
     }
-
-    if (key === 'caregiverPhoneNum') {
-      const formatted = formatPhoneNumber(value)
-      setForm((prev) => ({ ...prev, caregiverPhoneNum: formatted }))
-      return
-    }
-
-    setForm((prev) => ({ ...prev, [key]: value }))
   }, [])
 
   //아이디 중복 확인
