@@ -62,7 +62,7 @@ const LoginInput = () => {
             label='아이디'
             type='text'
             subtitle='(전화번호)'
-            placeholder='010-0000-0000'
+            placeholder='01000000000'
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
