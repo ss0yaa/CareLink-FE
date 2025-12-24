@@ -6,6 +6,7 @@ function BigArticleCard({ newsId, img, title, time, disabled }) {
 
   const handleClick = () => {
     if (disabled) {
+      alert('오늘의 문제는 이미 완료하셨어요. 내일 다시 참여해 주세요.')
       return
     }
     navigate(`/training/article/${newsId}`)

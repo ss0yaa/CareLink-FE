@@ -19,14 +19,18 @@ function MonthSummarySection({ month, count, avgScore, bestScore }) {
           <img src={Histogram} />
           <div>
             <p className='font-medium text-[20px]'>평균 요약 점수</p>
-            <p className='font-semibold text-[30px]'>{avgScore}점</p>
+            <p className='font-semibold text-[30px]'>
+              {avgScore != null ? `${avgScore}점` : '-점'}
+            </p>
           </div>
         </div>
         <div className='flex flex-col gap-2.5 items-center justify-center text-center'>
           <img src={Prize} />
           <div>
             <p className='font-medium text-[20px]'>최고 훈련 점수</p>
-            <p className='font-semibold text-[30px]'>{bestScore}점</p>
+            <p className='font-semibold text-[30px]'>
+              {bestScore != null ? `${bestScore}점` : '-점'}
+            </p>
           </div>
         </div>
       </div>

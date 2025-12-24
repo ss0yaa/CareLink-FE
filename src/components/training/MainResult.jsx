@@ -18,7 +18,7 @@ const MainResult = () => {
       const year = new Date().getFullYear()
       const formattedMonth = `${year}-${String(month).padStart(2, '0')}`
 
-      const res = await api.get('/api/trainings/monthly/', { params: { month: formattedMonth } })
+      const res = await api.get('/api/trainings/monthly', { params: { month: formattedMonth } })
 
       if (res.data.success) {
         setSummary(res.data.data.summary)
@@ -26,6 +26,9 @@ const MainResult = () => {
       }
     } catch (err) {
       console.error(err)
+      console.error('STATUS:', err.response.status)
+      console.error('HEADERS:', err.response.headers)
+      console.error('DATA:', err.response.data)
     }
   }
 
