@@ -6,11 +6,47 @@ import DiaryTool from './DiaryTool'
 import DiaryBtn from './DiaryBtn'
 import diaryRecord from '@/assets/icons/icon-diary-record.svg'
 import DiaryCanvas from './DiaryCanvas'
+import api from '@/apis/axios'
 
 const DiaryWriteContent = () => {
   const navigate = useNavigate()
   const today = new Date()
   const formattedDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`
+
+  const [title, setTitle] = useState('')
+
+  const handleSave = async () => {
+    try {
+      if (!title.trim()) {
+        alert('일기 제목을 입력해주세요!')
+        return
+      }
+
+      //캔버스 -> Blob
+      const blob = await canvasRef.current?.exportBlob?.()
+      if (!blob) {
+        alert('이미지 생성에 실패했어요.')
+        return
+      }
+
+      //Blob -> File
+      const file = new File([blob], 'diary.png', { type: 'image/png' })
+
+      //FormData 구성
+      const formData = new FormData()
+      formData.append('title', title)
+      formData.append('image', file)
+
+      //업로드
+      const res = await api.post('/api/diary', formData)
+
+      console.log(res.data)
+      navigate(`/diary/${res.data.data}`)
+    } catch (e) {
+      console.error(e)
+      alert('저장 중 오류가 발생했어요.')
+    }
+  }
 
   const canvasRef = useRef(null)
   const [tool, setTool] = useState('pen')
@@ -25,7 +61,7 @@ const DiaryWriteContent = () => {
           <p className='font-normal text-[18px] text-black pl-[5px]'>{formattedDate}</p>
         </div>
       </div>
-      <DiaryTitleInput />
+      <DiaryTitleInput title={title} setTitle={setTitle} />
       <DiaryTool
         tool={tool}
         setTool={setTool}
@@ -46,7 +82,13 @@ const DiaryWriteContent = () => {
             <img src={diaryRecord} alt='일기 기록' className='w-[21px] h-6 mr-2.5' />
             나의 일기 기록
           </button>
-          <DiaryBtn title='저장하기' />
+          <button
+            type='button'
+            onClick={handleSave}
+            className='bg-primary rounded-[10px] font-semibold text-[23px] text-white min-w-[282px] py-5 cursor-pointer'
+          >
+            저장하기
+          </button>
         </div>
       </div>
     </div>
