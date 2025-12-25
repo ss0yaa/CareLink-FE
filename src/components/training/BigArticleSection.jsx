@@ -1,6 +1,5 @@
 import React from 'react'
 import BigArticleCard from './BigArticleCard'
-import Thumb from '@/assets/images/temp-article-thumb.svg'
 
 const BigArticleSection = ({ items, disabled }) => {
   return (

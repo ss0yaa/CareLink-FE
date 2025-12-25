@@ -1,6 +1,5 @@
 import React from 'react'
 import SmallArticleCard from './SmallArticleCard'
-import Thumb from '@/assets/images/temp-content-thumb.svg'
 
 const SmallArticleSection = ({ items, disabled }) => {
   return (
