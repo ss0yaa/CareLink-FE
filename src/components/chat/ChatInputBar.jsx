@@ -99,7 +99,7 @@ function ChatInputBar({ onSendText, onSendVoice }) {
             value={text}
             onChange={(e) => setText(e.target.value)}
             onKeyDown={handleKeyDown}
-            className='w-full bg-transparent outline-none'
+            className='w-[95%] bg-transparent outline-none'
           />
           {/* 음성 입력 */}
           <button
