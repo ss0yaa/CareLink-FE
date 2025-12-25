@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import api from '@/apis/axios'
 import Profile from '@/assets/icons/icon-profile.svg'
 import Chat from '@/assets/icons/icon-nav-chat.svg'
 import Training from '@/assets/icons/icon-nav-training.svg'
@@ -16,6 +17,7 @@ const MENUS = [
 ]
 
 function SideNavBar() {
+  const [name, setName] = useState('')
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -23,11 +25,25 @@ function SideNavBar() {
     if (!path) return
     navigate(path)
   }
+
+  const getUsername = async () => {
+    try {
+      const res = await api.get('/api/username')
+
+      setName(res.data.data)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  useEffect(() => {
+    getUsername()
+  }, [])
   return (
     <div className='h-dvh w-68 bg-[#F8F9F9] px-5 border-r border-r-[#DADADA]'>
       <div className='flex flex-row items-center gap-1.5 pt-5 px-2.5 pb-15'>
         <img src={Profile} />
-        <p className='text-[30px] font-medium'>이름</p>
+        <p className='text-[30px] font-medium'>{name}</p>
       </div>
       {/* 메뉴 리스트 */}
       <nav className='flex flex-col gap-[30px]'>
