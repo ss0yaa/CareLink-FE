@@ -1,7 +1,7 @@
 import React from 'react'
 import diary from '@/assets/icons/icon-diary.svg'
 
-const DiaryTitleInput = () => {
+const DiaryTitleInput = ({ title, setTitle }) => {
   return (
     <div>
       <div className='flex items-center pb-2.5'>
@@ -10,7 +10,9 @@ const DiaryTitleInput = () => {
       </div>
       <input
         type='text'
+        value={title}
         placeholder='제목을 입력해주세요.'
+        onChange={(e) => setTitle(e.target.value)}
         className='border-[1.5px] border-[#B3B3B3] rounded-[10px] w-full font-semibold text-[20px] px-[25px] py-[18px]'
       />
     </div>
