@@ -40,7 +40,7 @@ const conditionForm = [
   },
 ]
 
-function ConditionModal({ onClose, onChecked }) {
+function ConditionModal({ onClose, onSuccess }) {
   // 항목별 점수 저장
   const [answers, setAnswers] = useState({ mood: null, sleep: null, pain: null })
   // 모달 등록 vs 수정 모드 구분
@@ -71,8 +71,7 @@ function ConditionModal({ onClose, onChecked }) {
       } else {
         await api.post('/api/condition/today', payload)
       }
-
-      onChecked()
+      await onSuccess()
       onClose()
     } catch (err) {
       console.error(err)

@@ -5,7 +5,7 @@ import CheckListSection from './CheckListSection'
 import AlertPillModal from './AlertPillModal'
 import Loading from '../common/Loading'
 
-function PillModal({ onClose, onChecked }) {
+function PillModal({ onClose, onSuccess }) {
   const [morning, setMorning] = useState([])
   const [lunch, setLunch] = useState([])
   const [dinner, setDinner] = useState([])
@@ -25,8 +25,6 @@ function PillModal({ onClose, onChecked }) {
       } else {
         setIsEmpty(false)
         const allItems = [...morningMedicines, ...noonMedicines, ...eveningMedicines]
-        const isAnyTaken = allItems.some((item) => item.isTaken)
-        onChecked()
         setMorning(morningMedicines)
         setLunch(noonMedicines)
         setDinner(eveningMedicines)
@@ -48,7 +46,7 @@ function PillModal({ onClose, onChecked }) {
       await api.post('/api/medicines/today', {
         medicineIntakeTimeIds: takenIds,
       })
-
+      await onSuccess()
       onClose()
     } catch (err) {
       console.error(err)

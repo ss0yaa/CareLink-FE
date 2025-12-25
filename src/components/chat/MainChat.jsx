@@ -47,7 +47,6 @@ function MainChat() {
       const formData = new FormData()
       formData.append('file', file)
 
-      // Content-type 지정하면 안된다는데 실제 연동에서 확인 필요함
       const res = await api.post('/api/chatbot/voice', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',

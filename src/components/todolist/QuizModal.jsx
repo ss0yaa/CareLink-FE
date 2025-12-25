@@ -3,7 +3,7 @@ import api from '@/apis/axios'
 import ModalBase from './ModalBase'
 import QuizButton from './QuizButton'
 
-function QuizModal({ onClose, onChecked }) {
+function QuizModal({ onClose, onSuccess }) {
   const [quiz, setQuiz] = useState(null)
   const [selectedIndex, setSelectedIndex] = useState(null)
   const [isAnswered, setIsAnswered] = useState(false)
@@ -20,9 +20,7 @@ function QuizModal({ onClose, onChecked }) {
         setQuiz(res.data.data)
       }
     } catch (err) {
-      console.error('QUIZ ERROR FULL:', err)
-      console.error('STATUS:', err.response?.status)
-      console.error('DATA:', err.response?.data)
+      console.error(err)
     }
   }
   // 버튼 선택
@@ -43,7 +41,7 @@ function QuizModal({ onClose, onChecked }) {
         setIsAnswered(true)
         setCorrectIndex(result.correctOption - 1)
         setIsCorrect(result.correct)
-        onChecked()
+        await onSuccess()
       }
     } catch (err) {
       console.error(err)

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import api from '@/apis/axios'
 import TodoButton from './TodoButton'
 import PillModal from '../todolist/PillModal'
 import ConditionModal from '../todolist/ConditionModal'
@@ -15,16 +16,28 @@ const TodoList = () => {
     quiz: false,
   })
 
-  const handleChecked = (type) => {
-    setDoneStatus((prev) => ({
-      ...prev,
-      [type]: true,
-    }))
-  }
-
   const handleClose = () => {
     setOpenModal(null)
   }
+
+  const checkTodoList = async () => {
+    try {
+      const res = await api.get('/api/chatbot')
+      const data = res.data.data
+
+      setDoneStatus({
+        pill: data.isMedicineChecked,
+        condition: data.isConditionChecked,
+        quiz: data.isQuizChecked,
+      })
+    } catch (err) {
+    } finally {
+    }
+  }
+
+  useEffect(() => {
+    checkTodoList()
+  }, [])
 
   return (
     <>
@@ -59,15 +72,11 @@ const TodoList = () => {
         />
       </div>
       {/* 각 모달 띄우기 */}
-      {openModal === 'pill' && (
-        <PillModal onClose={handleClose} onChecked={() => handleChecked('pill')} />
-      )}
+      {openModal === 'pill' && <PillModal onClose={handleClose} onSuccess={checkTodoList} />}
       {openModal === 'condition' && (
-        <ConditionModal onClose={handleClose} onChecked={() => handleChecked('condition')} />
+        <ConditionModal onClose={handleClose} onSuccess={checkTodoList} />
       )}
-      {openModal === 'quiz' && (
-        <QuizModal onClose={handleClose} onChecked={() => handleChecked('quiz')} />
-      )}
+      {openModal === 'quiz' && <QuizModal onClose={handleClose} onSuccess={checkTodoList} />}
     </>
   )
 }
