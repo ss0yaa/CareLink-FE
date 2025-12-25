@@ -21,18 +21,14 @@ function MainChat() {
         { id: `${index}-answer`, role: 'bot', text: c.answer },
       ])
 
-      if (getMessages.length === 0) {
-        setMessages([
-          {
-            id: 'default-question',
-            role: 'bot',
-            text: "안녕하세요! 오늘 하루를 활기차게 시작해볼까요?\n상단의 '오늘의 할 일'을 먼저 확인해주세요.",
-          },
-          ...getMessages,
-        ])
-      } else {
-        setMessages(getMessages)
-      }
+      setMessages([
+        {
+          id: 'default-question',
+          role: 'bot',
+          text: "안녕하세요! 오늘 하루를 활기차게 시작해볼까요?\n상단의 '오늘의 할 일'을 먼저 확인해주세요.",
+        },
+        ...getMessages,
+      ])
     } catch (err) {
       console.error(err)
     } finally {
