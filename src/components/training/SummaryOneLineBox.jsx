@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import api from '@/apis/axios'
 import SubmitButton from './SubmitButton'
 import FeedbackBox from './FeedbackBox'
+import Loading from '../common/Loading'
 import IconNumber from '@/assets/icons/icon-number-2.svg'
 
 const SummaryOneLineBox = ({
@@ -11,6 +12,7 @@ const SummaryOneLineBox = ({
   defaultAnswer = null,
 }) => {
   const [showFeedback, setShowFeedback] = useState(mode === 'history')
+  const [isLoading, setIsLoading] = useState(false)
   const [text, setText] = useState('')
   const [answer, setAnswer] = useState(defaultAnswer)
 
@@ -22,6 +24,7 @@ const SummaryOneLineBox = ({
       return
     }
     try {
+      setIsLoading(true)
       const res = await api.post(`/api/trainings/news/${newsId}/summary`, {
         summary: text,
       })
@@ -29,6 +32,8 @@ const SummaryOneLineBox = ({
       setShowFeedback(true)
     } catch (err) {
       console.error(err)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -57,8 +62,9 @@ const SummaryOneLineBox = ({
       <div className='flex justify-center'>
         <SubmitButton label='최종 피드백 보기' onClick={handleSubmit} disabled={!isFilled} />
       </div>
+      {isLoading && <Loading />}
       {/* 피드백 박스 */}
-      {showFeedback && (
+      {!isLoading && showFeedback && (
         <FeedbackBox
           title='최종 피드백'
           text={`모든 훈련을 완료하셨습니다! 정말 대단해요!\n AI의 자동 요약을 참교해 비교해보세요. 꾸준한 훈련은 인지 능력 향상에 큰 도움이 됩니다.`}

@@ -5,9 +5,11 @@ import IconNumber from '@/assets/icons/icon-number-1.svg'
 import CircleCheck from '@/assets/icons/icon-circle-check.svg'
 import FieldRow from './FieldRow'
 import SubmitButton from './SubmitButton'
+import Loading from '../common/Loading'
 
 const SummaryBox = ({ newsId, mode = 'today', defaultFieldData = null, defaultAnswers = null }) => {
   const [showFeedback, setShowFeedback] = useState(mode === 'history')
+  const [isLoading, setIsLoading] = useState(false)
   const [fieldData, setFieldData] = useState(
     defaultFieldData || {
       who: '',
@@ -25,7 +27,7 @@ const SummaryBox = ({ newsId, mode = 'today', defaultFieldData = null, defaultAn
     setFieldData((prev) => ({ ...prev, [key]: value }))
   }
 
-  // 모든 필드 채워졌는지 확인
+  // 필드 하나라도 채워졌는지 확인
   const isAllFilled = Object.values(fieldData).some((val) => val.trim() !== '')
   const handleSubmit = async () => {
     if (mode === 'history') return
@@ -34,6 +36,7 @@ const SummaryBox = ({ newsId, mode = 'today', defaultFieldData = null, defaultAn
       return
     }
     try {
+      setIsLoading(true)
       const res = await api.post(`/api/trainings/news/${newsId}/sixw`, {
         who: fieldData.who,
         whenAt: fieldData.whenAt,
@@ -46,6 +49,8 @@ const SummaryBox = ({ newsId, mode = 'today', defaultFieldData = null, defaultAn
       setShowFeedback(true)
     } catch (err) {
       console.error(err)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -117,8 +122,9 @@ const SummaryBox = ({ newsId, mode = 'today', defaultFieldData = null, defaultAn
       <div className='flex justify-center'>
         <SubmitButton label='답변 확인하기' onClick={handleSubmit} disabled={!isAllFilled} />
       </div>
+      {isLoading && <Loading />}
       {/* 피드백 박스 -> 답변 확인 누르면 보이게 */}
-      {showFeedback && (
+      {!isLoading && showFeedback && (
         <FeedbackBox
           title='1단계 피드백'
           text='입력한 내용과 모법 답안을 비교해 보세요. 보완할 점도 확인하면 실력 향상에 도움이 될 거예요.'
