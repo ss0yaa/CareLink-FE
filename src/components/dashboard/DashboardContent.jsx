@@ -47,11 +47,11 @@ const DashboardContent = () => {
     return <div className='flex-1 text-2xl bg-background px-[50px] py-[30px]'>{error}</div>
 
   return (
-    <div className='flex-1 bg-background px-[50px] py-[30px]'>
+    <div className='flex-1 bg-background px-[50px] py-[30px] overflow-y-auto'>
       <div>
         <h1 className='font-semibold text-[40px] text-black pb-6'>종합 대시보드</h1>
       </div>
-      <div className='grid grid-rows-3 gap-9'>
+      <div className='flex flex-col gap-9'>
         <div className='grid grid-cols-4 gap-7'>
           <ConditionCard moodData={moodChartData} data={dash.condition.status} />
           <StatusCard theme={'medicine'} data={dash.medicine} />
