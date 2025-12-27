@@ -52,7 +52,7 @@ const DiaryDetailContent = () => {
   }
 
   return (
-    <div className='px-[50px] py-[30px] w-full overflow-y-auto flex flex-col gap-5'>
+    <div className='flex-1 bg-background px-[50px] py-[30px] w-full overflow-y-auto flex flex-col gap-5'>
       <div>
         <h1 className='font-semibold text-[40px] text-black pb-2.5'>나의 일기 기록</h1>
         <div className='flex items-center'>
