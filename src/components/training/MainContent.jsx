@@ -26,7 +26,7 @@ const MainContent = () => {
         setBigArticles(recommended)
         setSmallArticles(others)
 
-        const isTodayDone = [...recommended, ...others].some(
+        const isTodayDone = [...recommended, ...others].all(
           (item) => item.canEnterTraining === false,
         )
 
